@@ -2,10 +2,12 @@
 const express = require('express');
 const app = express();
 const port = 4000;
+const cors = require('cors');
 
 const solveRouter = require('./Router/solveRouter'); // 라우터 모듈 임포트
 
 app.use('/api', solveRouter); // API 라우트 분리
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.send('Hello World!');

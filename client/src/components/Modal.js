@@ -8,7 +8,7 @@ function Modal({ isOpen, onClose, content }) {
     <div id="modal-backdrop" className="modal-backdrop" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="modal-close-button" onClick={onClose}>×</button>
-        <h2 className="modal-title">선택한 지역</h2>
+        <h2 className="modal-title">{content}</h2>
         <p>{content}</p>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import WorldMap from './components/worldmap';
+//import WorldMap from './components/worldmap';
 import KoreaMap from './components/koreamap';
 import './style/index.css';  
 

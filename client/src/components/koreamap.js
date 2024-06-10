@@ -21,11 +21,13 @@ const customNames = {
   "Jeju" : "제주특별자치도",
   "Daegu" : "대구광역시",
   "Ulsan" : "울산광역시",
+  "Incheon" : "인천광역시",
 };
 
 function KoreaMap() {
   const [selectedRegion, setSelectedRegion] = useState('');
   const [isModalOpen, setModalOpen] = useState(false);
+  const [problems, setProblems] = useState([]);
 
   useEffect(() => {
     let map = am4core.create("chartdiv", am4maps.MapChart);
@@ -42,7 +44,7 @@ function KoreaMap() {
     map.series.push(polygonSeries);
 
     let polygonTemplate = polygonSeries.mapPolygons.template;
-    polygonTemplate.tooltipText = "{customName}"; // 툴팁에 customName 필드를 참조하도록 설정
+    polygonTemplate.tooltipText = "{customName}";
     polygonTemplate.fill = am4core.color("#504b3b");
     polygonTemplate.fillOpacity = 0.6;
 
@@ -63,8 +65,10 @@ function KoreaMap() {
       }
       lastSelected = ev.target;
       ev.target.isActive = true;
-      setSelectedRegion(customNames[ev.target.dataItem.dataContext.name]);
-      setModalOpen(true);
+      const regionName = customNames[ev.target.dataItem.dataContext.name];
+      fetchProblems(regionName); // 먼저 문제를 가져오도록 호출
+      setSelectedRegion(regionName); // 상태 업데이트
+      setModalOpen(true); // 모달 열기
     });
 
     return () => {
@@ -72,10 +76,19 @@ function KoreaMap() {
     };
   }, []);
 
+  function fetchProblems(selectedRegion) {
+    fetch(`http://localhost:4000/api/problems?region=${encodeURIComponent(selectedRegion)}`)
+        .then(response => response.json())
+        .then(data => {
+            setProblems(data);
+        })
+        .catch(error => console.error('Error fetching problems:', error));
+  }
+
   return (
     <>
       <div id='chartdiv' style={{ width: '100vw', height: '100vh' }} />
-      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} content={selectedRegion} />
+      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} problems={problems} />
     </>
   );
 }

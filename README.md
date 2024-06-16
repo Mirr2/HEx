@@ -53,3 +53,19 @@
 git clone https://github.com/yourusername/koreamap.git
 cd koreamap
 npm install
+```
+
+###Running Locally
+- Node.js 서버 시작하기
+```bash
+node server.js
+```
+
+### USAGE
+- 지도 위의 지역을 클릭하여 해당 지역에 대한 문제를 확인할 수 있습니다. 문제의 정답을 입력하여 지역을 정복해 보세요!
+
+### Deployment on AWS
+- EC2 인스턴스를 이용하여 AWS에 배포하였으나, 여러 문제로 연락을 주시면 서버를 가동하겠습니다.
+- http://3.39.143.22:3000/
+<img width="1163" alt="image" src="https://github.com/Mirr2/HEx/assets/130574746/28305101-b69d-4992-b407-ba3f186367da">
+

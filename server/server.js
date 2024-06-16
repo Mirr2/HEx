@@ -5,6 +5,7 @@ const port = 4000;
 
 const solveRouter = require('./Router/solveRouter');
 
+app.use(express.json());
 // CORS 세부 설정 예
 app.use(cors({
   origin: '*', // 모든 도메인 허용

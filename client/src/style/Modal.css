@@ -127,7 +127,14 @@
     border-bottom: 1px solid #ccc;
     max-height: 350px; /* 최대 높이 설정 */
     overflow-y: auto; /* 세로 스크롤만 허용 */
+    white-space: pre-wrap; /* 줄바꿈과 공백을 유지하여 표시 */
+    word-wrap: break-word; /* 긴 단어가 줄을 넘어가는 것을 방지 */
   }
+  .accordion-content p {
+    white-space: pre-wrap; /* 줄바꿈과 공백을 유지하여 표시 */
+    word-wrap: break-word; /* 긴 단어가 줄을 넘어가는 것을 방지 */
+  }
+  
   
   .flag-form {
     margin-top: 20px;

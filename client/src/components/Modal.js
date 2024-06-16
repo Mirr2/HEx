@@ -18,15 +18,39 @@ function Modal({ isOpen, onClose, problems, region, isLoading }) {
     setActiveTitleIndex(activeTitleIndex === index ? null : index);
   };
 
-  const handleFlagSubmit = (e) => {
+  const handleFlagSubmit = async (e) => {
     e.preventDefault();
-    if (flagInput === problems[activeTitleIndex]?.flag) {
-      setFlagResult('Correct flag! You have dominated this region.');
-      setIsCorrect(true);
-    } else {
-      setFlagResult('Incorrect flag.');
+    if (activeTitleIndex === null) {
+      setFlagResult('Please select a problem first.');
+      setIsCorrect(false);
+      return;
+    }
+
+    const problemId = problems[activeTitleIndex].id;
+
+    try {
+      const response = await fetch('http://localhost:4000/api/check-flag', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ problemId, flag: flagInput }),
+      });
+
+      const result = await response.json();
+      if (result.correct) {
+        setFlagResult('Correct flag! You have dominated this region.');
+        setIsCorrect(true);
+      } else {
+        setFlagResult('Incorrect flag.');
+        setIsCorrect(false);
+      }
+    } catch (error) {
+      console.error('Error checking flag:', error);
+      setFlagResult('Error checking flag.');
       setIsCorrect(false);
     }
+
     setFlagInput('');
   };
 
@@ -39,8 +63,8 @@ function Modal({ isOpen, onClose, problems, region, isLoading }) {
           <p>Loading...</p>
         ) : problems.length > 0 ? (
           problems.map((problem, index) => (
-            <>
-              <div key={`category-${index}`} className="accordion-title" onClick={() => toggleCategoryAccordion(index)}>
+            <React.Fragment key={index}>
+              <div className="accordion-title" onClick={() => toggleCategoryAccordion(index)}>
                 <div>{problem.category}</div>
                 <div>{activeCategoryIndex === index ? '-' : '+'}</div>
               </div>
@@ -49,7 +73,7 @@ function Modal({ isOpen, onClose, problems, region, isLoading }) {
                   <p>{problem.notion || 'No notion provided.'}</p>
                 </div>
               )}
-              <div key={`title-${index}`} className="accordion-title" onClick={() => toggleTitleAccordion(index)}>
+              <div className="accordion-title" onClick={() => toggleTitleAccordion(index)}>
                 <div>{problem.title}</div>
                 <div>{activeTitleIndex === index ? '-' : '+'}</div>
               </div>
@@ -57,10 +81,9 @@ function Modal({ isOpen, onClose, problems, region, isLoading }) {
                 <div className="accordion-content">
                   <p>{problem.descriptions || 'No description provided.'}</p>
                   <p>Score: {problem.score}</p>
-                  <p>Flag: {problem.flag}</p>
                 </div>
               )}
-            </>
+            </React.Fragment>
           ))
         ) : (
           <p>No data available for this region.</p>

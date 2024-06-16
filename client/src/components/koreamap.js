@@ -16,11 +16,11 @@ function KoreaMap() {
 
     try {
       const response = await axios.get(`http://localhost:4000/api/problems?region=${encodeURIComponent(region)}`);
-      console.log("Response from server:", response.data);  // 콘솔에 응답 데이터 출력
+      console.log("Response from server:", response.data);
       setProblems(response.data);
     } catch (error) {
       console.error('Error fetching problems:', error);
-      setProblems([]);  // 에러가 발생했을 때 문제 목록 초기화
+      setProblems([]);  
     } finally {
       setLoading(false);
     }

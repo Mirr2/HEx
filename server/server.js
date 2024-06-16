@@ -1,13 +1,17 @@
-// server.js
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const port = 4000;
-const cors = require('cors');
 
-const solveRouter = require('./Router/solveRouter'); // 라우터 모듈 임포트
+const solveRouter = require('./Router/solveRouter');
 
-app.use('/api', solveRouter); // API 라우트 분리
-app.use(cors());
+// CORS 세부 설정 예
+app.use(cors({
+  origin: '*', // 모든 도메인 허용
+  methods: ['GET', 'POST'], // 허용할 HTTP 메소드
+  allowedHeaders: ['Content-Type', 'Authorization'] // 허용할 헤더
+}));
+app.use('/api', solveRouter);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
